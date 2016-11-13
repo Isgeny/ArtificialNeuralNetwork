@@ -182,6 +182,7 @@
     <property name="title">
      <string>Справка</string>
     </property>
+    <addaction name="action"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuCommands"/>
@@ -211,6 +212,11 @@
   <action name="actionRecognizePercent">
    <property name="text">
     <string>Узнать процент распознавания</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>О программе</string>
    </property>
   </action>
  </widget>

@@ -176,14 +176,14 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
             mistake += E(*(l.at(hiddenLayCount)->y()), Y[k]);
         }
         mistake = mistake / dir.count();
-        qDebug() << "Mistake: " << mistake;
+        qDebug() << "Current mistake: " << mistake;
         if(mistake < minMistake)
         {
             qDebug() << "Minimal - " << minMistake << "; Current - " << mistake;
             return;
         }
     }
-    qDebug() << time.elapsed();
+    qDebug() << "Teaching time (hours): " << time.elapsed()/1000/60/60;
 }
 
 void NeuralNet::findDeltas(const ActivationFunc& aFunc, const DoubleVector& y)

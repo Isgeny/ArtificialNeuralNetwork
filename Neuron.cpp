@@ -164,7 +164,7 @@ double Neuron::relu() const
 double Neuron::randomizedReluTeaching() const
 {
     if(sum() < 0.0)
-        return (1.0 / ((double)(rand() % 6) + 3.0)*sum());
+        return (1.0 / ((double)(qrand() % 6) + 3.0)*sum());
     return sum();
 }
 

@@ -100,6 +100,13 @@ void MainWindow::slot_buttonTeach_pressed(int inputsCount, int outputsCount, int
         net->teach(eraCount, nu, minMistake, aFuncV.at(i), X, Y);
 
         double accuracy = net->recognitionAccuracy();
+        qDebug() << "Accuracy: " << accuracy;
+        qDebug() << "Inputs: " << inputsCount;
+        qDebug() << "Outputs: " << outputsCount;
+        qDebug() << "Hidden Layer Count: " << hidLayCount;
+        qDebug() << "Activation func: " << aFuncV[i];
+        qDebug() << "Era count: " << eraCount;
+        qDebug() << "Nu: " << nu;
 
         net->writeWeightsToFile(inputsCount, outputsCount, hidLayCount, hidV, aFuncV.at(i), eraCount, nu, accuracy);
     }
