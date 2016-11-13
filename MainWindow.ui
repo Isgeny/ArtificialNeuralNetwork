@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>831</width>
+    <height>614</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Распознавание символов</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>11</y>
+      <width>536</width>
+      <height>552</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="title">
+     <string>Распознаваемый символ:</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>11</number>
+     </property>
+     <property name="topMargin">
+      <number>11</number>
+     </property>
+     <property name="rightMargin">
+      <number>11</number>
+     </property>
+     <property name="bottomMargin">
+      <number>11</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_image">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>11</y>
+      <width>240</width>
+      <height>256</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Оригинал:</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_orig">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>307</y>
+      <width>240</width>
+      <height>256</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Распознанный символ:</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_recognized">
+       <property name="font">
+        <font>
+         <pointsize>36</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>270</y>
+      <width>241</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="btn_recognize">
+       <property name="text">
+        <string>Распознать</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_clear">
+       <property name="text">
+        <string>Очистить</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>831</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionReadWeight"/>
+   </widget>
+   <widget class="QMenu" name="menuCommands">
+    <property name="title">
+     <string>Команды</string>
+    </property>
+    <addaction name="actionTeach"/>
+    <addaction name="actionRecognize"/>
+    <addaction name="actionRecognizePercent"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Справка</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuCommands"/>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Открыть изображение символа</string>
+   </property>
+  </action>
+  <action name="actionRecognize">
+   <property name="text">
+    <string>Распознать символ</string>
+   </property>
+  </action>
+  <action name="actionTeach">
+   <property name="text">
+    <string>Обучить сеть</string>
+   </property>
+  </action>
+  <action name="actionReadWeight">
+   <property name="text">
+    <string>Считать веса из файла</string>
+   </property>
+  </action>
+  <action name="actionRecognizePercent">
+   <property name="text">
+    <string>Узнать процент распознавания</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

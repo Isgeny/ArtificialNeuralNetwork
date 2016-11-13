@@ -1,0 +1,8 @@
+TestingSample/
+TrainingSample/
+Weights/
+*.txt
+*.vcxproj
+*.filters
+*.user
+*.xlsx
