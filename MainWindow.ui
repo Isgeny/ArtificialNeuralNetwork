@@ -169,12 +169,15 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionReadWeight"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuCommands">
     <property name="title">
      <string>Команды</string>
     </property>
     <addaction name="actionTeach"/>
+    <addaction name="actionClean"/>
     <addaction name="actionRecognize"/>
     <addaction name="actionRecognizePercent"/>
    </widget>
@@ -182,7 +185,7 @@
     <property name="title">
      <string>Справка</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuCommands"/>
@@ -192,6 +195,9 @@
   <action name="actionOpen">
    <property name="text">
     <string>Открыть изображение символа</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
   <action name="actionRecognize">
@@ -208,15 +214,28 @@
    <property name="text">
     <string>Считать веса из файла</string>
    </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
   </action>
   <action name="actionRecognizePercent">
    <property name="text">
     <string>Узнать процент распознавания</string>
    </property>
   </action>
-  <action name="action">
+  <action name="actionAbout">
    <property name="text">
     <string>О программе</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="actionClean">
+   <property name="text">
+    <string>Очистить</string>
    </property>
   </action>
  </widget>

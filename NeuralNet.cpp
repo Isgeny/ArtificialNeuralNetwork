@@ -182,8 +182,12 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
             qDebug() << "Minimal - " << minMistake << "; Current - " << mistake;
             return;
         }
+        double currentAccuracy = recognitionAccuracy();
+        qDebug() << "Current accuracy: " << currentAccuracy;
+        writeWeightsToFile(inputsCount, outputsCount, hiddenLayCount, hiddenNeuronCount, aFunc, eraCount, nu, currentAccuracy);
     }
-    qDebug() << "Teaching time (hours): " << time.elapsed()/1000/60/60;
+    double elapsedTime = (double)time.elapsed();
+    qDebug() << "Teaching time (hours): " << elapsedTime/1000.0/60.0/60.0;
 }
 
 void NeuralNet::findDeltas(const ActivationFunc& aFunc, const DoubleVector& y)

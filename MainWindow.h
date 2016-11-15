@@ -29,6 +29,8 @@ public slots:
 private slots:
     void on_actionReadWeight_triggered();
     void on_actionRecognizePercent_triggered();
+    void on_actionExit_triggered();
+    void on_actionClean_triggered();
 
 private:
     Ui::MainWindow *ui;

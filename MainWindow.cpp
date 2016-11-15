@@ -6,8 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    qsrand(QTime::currentTime().msecsSinceStartOfDay());
     net = new NeuralNet;
+    qsrand(QTime::currentTime().msecsSinceStartOfDay());
     teachDialog = new TeachingDialog(this);
     connect(teachDialog, &TeachingDialog::signalBtnTeachClicked, this, &MainWindow::slot_buttonTeach_pressed);
 }
@@ -19,6 +19,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    ui->lbl_recognized->clear();
     QString sampleDir = "D:/Projects/TextRecognition/TextRecognition/TestingSample";
     QString filename = QFileDialog::getOpenFileName(this, "Выберите изображение", sampleDir, "*.bmp");
     if(!filename.isEmpty())
@@ -148,4 +149,14 @@ QTextStream &operator <<(QTextStream &out, ActivationFunc& aFunc)
 {
     out << (quint32&)aFunc;
     return out;
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    this->close();
+}
+
+void MainWindow::on_actionClean_triggered()
+{
+    on_btn_clear_clicked();
 }
