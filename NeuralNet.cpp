@@ -184,6 +184,8 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
         }
         double currentAccuracy = recognitionAccuracy();
         qDebug() << "Current accuracy: " << currentAccuracy;
+        double curElapsTime = (double)time.elapsed();
+        qDebug() << "Current teaching time (hours): " << curElapsTime/1000.0/60.0/60.0;
         writeWeightsToFile(inputsCount, outputsCount, hiddenLayCount, hiddenNeuronCount, aFunc, eraCount, nu, currentAccuracy);
     }
     double elapsedTime = (double)time.elapsed();
