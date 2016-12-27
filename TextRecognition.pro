@@ -19,14 +19,16 @@ SOURCES +=\
     NeuronLay.cpp \
     Neuron.cpp \
     TeachingDialog.cpp \
-    OperatorOverloading.cpp
+    OperatorOverloading.cpp \
+    Presenter.cpp
 
 HEADERS  += MainWindow.h \
     NeuralNet.h \
     NeuronLay.h \
     Neuron.h \
     TeachingDialog.h \
-    MyDefenitions.h
+    MyDefenitions.h \
+    Presenter.h
 
 FORMS    += MainWindow.ui \
     TeachingDialog.ui

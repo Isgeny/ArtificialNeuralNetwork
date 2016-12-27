@@ -3,10 +3,13 @@
 
 #include "TeachingDialog.h"
 #include "NeuralNet.h"
+#include "Presenter.h"
 
 namespace Ui {
 class MainWindow;
 }
+
+class Presenter;
 
 class MainWindow : public QMainWindow
 {
@@ -15,27 +18,27 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void writeMatrixToFile(const DoubleMatrix& m, const QString& filename);
+    void setSymbolImage(const QImage& image);
+    QImage& getImage();
 
 public slots:
-    void on_actionOpen_triggered();
-    void on_btn_recognize_clicked();
-    void on_btn_clear_clicked();
-    void on_actionTeach_triggered();
     void slot_buttonTeach_pressed(int inputsCount, int outputsCount, int hidLayCount,
                                   const IntVector& hidV, const AFuncVector& aFuncV,
                                   int eraCount, double nu, double minMistake);
 
 private slots:
+    void on_actionOpenSymbolFile_triggered();
     void on_actionReadWeight_triggered();
-    void on_actionRecognizePercent_triggered();
     void on_actionExit_triggered();
+    void on_actionTeach_triggered();
+    void on_btn_recognize_clicked();
+    void on_btn_clear_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
     QImage image;
-    TeachingDialog *teachDialog;
-    NeuralNet *net;
+    Presenter* presenter;
+    TeachingDialog* teachDialog;
 
 };
 

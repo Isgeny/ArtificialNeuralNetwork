@@ -6,8 +6,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    net = new NeuralNet;
-    qsrand(QTime::currentTime().msecsSinceStartOfDay());
+
+    //Устанавливаем зерно рандома
+    srand(QDateTime::currentMSecsSinceEpoch());
+
+    //Создаем презентер
+    presenter = new Presenter(this, new NeuralNet());
+
     teachDialog = new TeachingDialog(this);
     connect(teachDialog, &TeachingDialog::signalBtnTeachClicked, this, &MainWindow::slot_buttonTeach_pressed);
 }
@@ -15,60 +20,43 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete presenter;
 }
 
-void MainWindow::writeMatrixToFile(const DoubleMatrix &m, const QString& filename)
+void MainWindow::setSymbolImage(const QImage& image)
 {
-    QFile file(filename);
-    QTextStream out(&file);
-    if(file.open(QIODevice::WriteOnly))
-    {
-        for(int i = 0; i < m.size(); i++)
-        {
-            for(int j = 0; j < m[i].size(); j++)
-                out << m[i][j] << " ";
-            out << "\n";
-        }
-        file.close();
-    }
+    //Установка оригинального и увеличенного изображений символов в окошки
+    this->image = image;
+    ui->lbl_orig->setPixmap(QPixmap::fromImage(image));
+    ui->lbl_image_scaled->setPixmap(QPixmap::fromImage(image.scaledToWidth(ui->lbl_image_scaled->height())));
 }
 
-void MainWindow::on_actionOpen_triggered()
+QImage &MainWindow::getImage()
 {
+    return image;
+}
+
+void MainWindow::on_actionOpenSymbolFile_triggered()
+{
+    //По нажатию кнопки из панелю меню "Открыть файл символа" показываем диалоговое окно выбора файла
+    presenter->openSymbolFile();
+
+    //Стираем текущий символ
     ui->lbl_recognized->clear();
-    QString sampleDir = "D:/Projects/TextRecognition/TextRecognition/TestingSample";
-    QString filename = QFileDialog::getOpenFileName(this, "Выберите изображение", sampleDir, "*.bmp");
-    if(!filename.isEmpty())
-    {
-        if(image.load(filename))
-        {
-            ui->lbl_orig->setPixmap(QPixmap::fromImage(image));
-
-            QImage tempIm = image;
-            tempIm = tempIm.scaledToWidth(ui->lbl_image->width());
-            ui->lbl_image->setPixmap(QPixmap::fromImage(tempIm));
-        }
-    }
-    else
-    {
-        qDebug() << "Can't open file!";
-    }
 }
 
 void MainWindow::on_btn_recognize_clicked()
 {
-    if(!image.isNull() && !ui->lbl_image->pixmap()->isNull())
+    if(!image.isNull() && !ui->lbl_image_scaled->pixmap()->isNull())
     {
-        DoubleVector x = net->pixelsToBinVector(image);
-        DoubleVector recognised = net->recognize(x, Neuron::getCurrentActFunc());
-        QChar recSymbol = net->vectorToSymbol(recognised);
-        ui->lbl_recognized->setText(recSymbol);
+        QChar recogSymbol = presenter->recognizeSymbol();
+        ui->lbl_recognized->setText(recogSymbol);
     }
 }
 
 void MainWindow::on_btn_clear_clicked()
 {
-    ui->lbl_image->clear();
+    ui->lbl_image_scaled->clear();
     ui->lbl_orig->clear();
     ui->lbl_recognized->clear();
 }
@@ -82,7 +70,7 @@ void MainWindow::slot_buttonTeach_pressed(int inputsCount, int outputsCount, int
                                           const IntVector& hidV, const AFuncVector& aFuncV,
                                           int eraCount, double nu, double minMistake)
 {
-    net->setInputsCount(inputsCount);
+    /*net->setInputsCount(inputsCount);
     net->setOutputsCount(outputsCount);
     net->setHiddenNeuronCount(hidV);
     net->setHiddenLayCount(hidLayCount);
@@ -127,32 +115,12 @@ void MainWindow::slot_buttonTeach_pressed(int inputsCount, int outputsCount, int
         qDebug() << "Nu: " << nu;
 
         net->writeWeightsToFile(inputsCount, outputsCount, hidLayCount, hidV, aFuncV.at(i), eraCount, nu, accuracy);
-    }
+    }*/
 }
 
 void MainWindow::on_actionReadWeight_triggered()
 {
-    QString weightsDir = "D:/Projects/TextRecognition/TextRecognition/Weights";
-    QString filename = QFileDialog::getOpenFileName(this, "Выберите файл весов", weightsDir, "*.txt");
-    if(!filename.isEmpty())
-    {
-        net->readWeightsFromFile(filename);
-        QMessageBox msg;
-        msg.setText("Чтение весов было успешно завершено");
-        msg.exec();
-    }
-    else
-    {
-        qDebug() << "Can't open file for reading weights!";
-    }
-}
-
-void MainWindow::on_actionRecognizePercent_triggered()
-{
-    QMessageBox msgBox;
-    msgBox.setText("Точность распознавания: " + QString::number(net->recognitionAccuracy()) + "%");
-    msgBox.setWindowTitle("Точность распознавания");
-    msgBox.exec();
+    presenter->readWeightFromFile();
 }
 
 void MainWindow::on_actionExit_triggered()

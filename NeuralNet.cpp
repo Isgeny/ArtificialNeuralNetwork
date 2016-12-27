@@ -1,32 +1,32 @@
 #include "NeuralNet.h"
 
-NeuralNet::NeuralNet() : inputsCount(0), outputsCount(0), hiddenLayCount(0), mistake(0.0)
+NeuralNet::NeuralNet() : inputsAmount(0), outputsAmount(0), hidLayAmount(0), mistake(0.0)
 {
 
 }
 
-NeuralNet::NeuralNet(int _inputsCount, int _outputsCount, int _hiddenLayCount, const IntVector& _hiddenNeuronCount) :
-    inputsCount(_inputsCount), outputsCount(_outputsCount), hiddenLayCount(_hiddenLayCount), hiddenNeuronCount(_hiddenNeuronCount)
+NeuralNet::NeuralNet(int _inputsAmount, int _outputsAmount, int _hidLayAmount, const IntVector& _hidNeuronAmount) :
+    inputsAmount(_inputsAmount), outputsAmount(_outputsAmount), hidLayAmount(_hidLayAmount), hidNeuronAmount(_hidNeuronAmount)
 {
     //Создание скрытых слоев
-    int tempInputs = inputsCount;
-    for(int i = 0; i < hiddenLayCount; i++)
+    int tempInputs = inputsAmount;
+    for(int i = 0; i < hidLayAmount; i++)
     {
-        l.push_back(new NeuronLay(tempInputs, hiddenNeuronCount.at(i)));
-        tempInputs = hiddenNeuronCount.at(i);
+        l.push_back(new NeuronLay(tempInputs, hidNeuronAmount.at(i)));
+        tempInputs = hidNeuronAmount.at(i);
     }
 
     //Создание выходного слоя
-    l.push_back(new NeuronLay(tempInputs, outputsCount));
+    l.push_back(new NeuronLay(tempInputs, outputsAmount));
 
     //Объедининение выходов одного слоя со входами следующего
-    for(int i = 0; i < hiddenLayCount; i++)
+    for(int i = 0; i < hidLayAmount; i++)
         l[i]->setY(l[i+1]->x());
 }
 
 NeuralNet::~NeuralNet()
 {
-    for(int i = 0; i < hiddenLayCount + 1; i++)
+    for(int i = 0; i < hidLayAmount + 1; i++)
         delete l[i];
     l.erase(l.begin(), l.end());
 }
@@ -41,20 +41,20 @@ void NeuralNet::readWeightsFromFile(const QString& fileName)
         //Считываем параметры сети (входы, выходы, функция, количество скрытых слоев)
         ActivationFunc aFunc;
         IntVector hidN;
-        in >> inputsCount >> outputsCount >> aFunc >> hiddenLayCount;
+        in >> inputsAmount >> outputsAmount >> aFunc >> hidLayAmount;
         Neuron::setCurrentActFunc(aFunc);
         //Считываем количество нейронов в скрытых слоях
-        for(int i = 0; i < hiddenLayCount; i++)
+        for(int i = 0; i < hidLayAmount; i++)
         {
             int temp;
             in >> temp;
             hidN.push_back(temp);
         }
-        hiddenNeuronCount = hidN;
-        setHiddenLayCount(hiddenLayCount);
+        hidNeuronAmount = hidN;
+        sethidLayAmount(hidLayAmount);
 
         //Считываем веса
-        for(int i = 0; i < hiddenLayCount + 1; i++)
+        for(int i = 0; i < hidLayAmount + 1; i++)
         {
             int tempNeuronCount = l[i]->getOutCount();
             for(int j = 0; j < tempNeuronCount; j++)
@@ -80,11 +80,11 @@ void NeuralNet::readWeightsFromFile(const QString& fileName)
     file.close();
 }
 
-void NeuralNet::writeWeightsToFile(int inputsCount, int outputsCount, int hidLayCount, const IntVector& hidV, const ActivationFunc& aFunc, int eraCount, double nu, double accuracy)
+void NeuralNet::writeWeightsToFile(int inputsAmount, int outputsAmount, int hidLayCount, const IntVector& hidV, const ActivationFunc& aFunc, int eraCount, double nu, double accuracy)
 {
     /*Формируем имя файла (количество входов, количество выходов, количество скрытых слоев,
       количество нейронов в каждом скрытом слое, функция-активации, количество эпох, скорость обучения, точность распознавания)*/
-    QString fileName = QString::number(inputsCount) + "_" + QString::number(outputsCount)+ "_" + QString::number(hidLayCount) + "_";
+    QString fileName = QString::number(inputsAmount) + "_" + QString::number(outputsAmount)+ "_" + QString::number(hidLayCount) + "_";
     for(int i = 0; i < hidLayCount; i++)
         fileName += QString::number(hidV.at(i)) + "_";
     fileName += QString::number(aFunc) + "_" + QString::number(eraCount) + "_" + QString::number(nu) + "_" + QString::number((int)accuracy) + ".txt";
@@ -95,11 +95,11 @@ void NeuralNet::writeWeightsToFile(int inputsCount, int outputsCount, int hidLay
     if(file.open(QIODevice::WriteOnly))
     {
         //Записываем параметры сети
-        out << inputsCount << " " << outputsCount << " " << Neuron::getCurrentActFunc() << " " << hiddenLayCount << " ";
-        for(int i = 0; i < hiddenLayCount; i++)
+        out << inputsAmount << " " << outputsAmount << " " << Neuron::getCurrentActFunc() << " " << hidLayAmount << " ";
+        for(int i = 0; i < hidLayAmount; i++)
             out << hidV[i] << " ";
 
-        for(int i = 0; i < hiddenLayCount + 1; i++)
+        for(int i = 0; i < hidLayAmount + 1; i++)
         {
             int tempNeuronCount = l[i]->getOutCount();
             for(int j = 0; j < tempNeuronCount; j++)
@@ -137,10 +137,10 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
         for(int k = 0; k < sampleSize; k++)
         {
             //Подаем сигналы на вход
-            for(int i = 0; i < inputsCount; i++)
+            for(int i = 0; i < inputsAmount; i++)
                 l[0]->setX(i, X[k][i]);
 
-            for(int i = 0; i < hiddenLayCount + 1; i++)
+            for(int i = 0; i < hidLayAmount + 1; i++)
             {
                 int tempNeuronCount = l[i]->getOutCount();
                 for(int j = 0; j < tempNeuronCount; j++)
@@ -172,7 +172,7 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
             //Находим ошибки нейронов
             findDeltas(aFunc, Y[k]);
             correctWeights();
-            mistake += E(*(l.at(hiddenLayCount)->y()), Y[k]);
+            mistake += E(*(l.at(hidLayAmount)->y()), Y[k]);
         }
         mistake = mistake / dir.count();
         qDebug() << "Current mistake: " << mistake;
@@ -186,7 +186,7 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
         QDateTime curTime = QDateTime::currentDateTime();
         double curElapsTime = (double)startTime.secsTo(curTime);
         qDebug() << "Current teaching time (hours): " << curElapsTime / 3600.0;
-        writeWeightsToFile(inputsCount, outputsCount, hiddenLayCount, hiddenNeuronCount, aFunc, eraCount, nu, currentAccuracy);
+        writeWeightsToFile(inputsAmount, outputsAmount, hidLayAmount, hidNeuronAmount, aFunc, eraCount, nu, currentAccuracy);
     }
     QDateTime finishTime = QDateTime::currentDateTime();
     double time = (double)startTime.secsTo(finishTime);
@@ -196,34 +196,34 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
 void NeuralNet::findDeltas(const ActivationFunc& aFunc, const DoubleVector& y)
 {
     //Ошибки нейронов выходного слоя
-    for(int i = 0; i < outputsCount; i++)
+    for(int i = 0; i < outputsAmount; i++)
     {
-        double tempFact = l[hiddenLayCount]->n(i)->getY();
+        double tempFact = l[hidLayAmount]->n(i)->getY();
         double tempDelta;
         switch(aFunc)
         {
         case HYPERBOLIC_TANGENT:
-            tempDelta = l[hiddenLayCount]->n(i)->deltaOutGipTang(y[i], tempFact);
+            tempDelta = l[hidLayAmount]->n(i)->deltaOutGipTang(y[i], tempFact);
             break;
         case LOG_SIGMOID:
-            tempDelta = l[hiddenLayCount]->n(i)->deltaOutLogSigm(y[i], tempFact);
+            tempDelta = l[hidLayAmount]->n(i)->deltaOutLogSigm(y[i], tempFact);
             break;
         case SOFTPLUS:
-            tempDelta = l[hiddenLayCount]->n(i)->deltaOutSoftplus(y[i], tempFact);
+            tempDelta = l[hidLayAmount]->n(i)->deltaOutSoftplus(y[i], tempFact);
             break;
         case RELU:
-            tempDelta = l[hiddenLayCount]->n(i)->deltaOutRelu(y[i], tempFact);
+            tempDelta = l[hidLayAmount]->n(i)->deltaOutRelu(y[i], tempFact);
             break;
         case RANDOMIZED_RELU:
-            tempDelta = l[hiddenLayCount]->n(i)->deltaOutRandomizedRelu(y[i], tempFact);
+            tempDelta = l[hidLayAmount]->n(i)->deltaOutRandomizedRelu(y[i], tempFact);
             break;
         default:
             break;
         }
-        l[hiddenLayCount]->n(i)->setDelta(tempDelta);
+        l[hidLayAmount]->n(i)->setDelta(tempDelta);
     }
     //Ошибки нейронов скрытых слоев
-    for(int i = hiddenLayCount - 1; i >= 0; i--)
+    for(int i = hidLayAmount - 1; i >= 0; i--)
     {
         int tempNeuronCount = l[i]->getOutCount();
         for(int j = 0; j < tempNeuronCount; j++)
@@ -264,7 +264,7 @@ void NeuralNet::findDeltas(const ActivationFunc& aFunc, const DoubleVector& y)
 
 void NeuralNet::correctWeights()
 {
-    for(int i = hiddenLayCount; i >= 0; i--)
+    for(int i = hidLayAmount; i >= 0; i--)
     {
         int tempNeuronCount = l[i]->getOutCount();
         for(int j = 0; j < tempNeuronCount; j++)
@@ -286,7 +286,7 @@ void NeuralNet::correctWeights()
     }
 }
 
-DoubleVector NeuralNet::recognize(const DoubleVector& x, ActivationFunc aFunc)
+DoubleVector NeuralNet::recognize(const DoubleVector& x, const ActivationFunc& aFunc)
 {
     DoubleVector output;
 
@@ -322,17 +322,15 @@ DoubleVector NeuralNet::recognize(const DoubleVector& x, ActivationFunc aFunc)
         }
     }
 
-    for(int i = 0; i < l[hiddenLayCount]->getOutCount(); i++)
-    {
-        output.push_back(l[hiddenLayCount]->n(i)->getY());
-    }
+    for(int i = 0; i < l[hidLayAmount]->getOutCount(); i++)
+        output.push_back(l[hidLayAmount]->n(i)->getY());
 
     return output;
 }
 
 double NeuralNet::recognitionAccuracy()
 {
-    QDir dir("D:/Projects/TextRecognition/TextRecognition/TestingSample");
+    /*QDir dir("D:/Projects/TextRecognition/TextRecognition/TestingSample");
     QStringList filters = (QStringList() << "*.bmp");
     QStringList fileList = dir.entryList(filters, QDir::Files);
     int recocnizedCount = 0;
@@ -353,7 +351,7 @@ double NeuralNet::recognitionAccuracy()
             recocnizedCount++;
     }
     double accuracy = ((double)recocnizedCount / (double)dir.count()) * 100.0;
-    return accuracy;
+    return accuracy;*/
 }
 
 double NeuralNet::E(const DoubleVector& factOut, const DoubleVector& realOut)
@@ -362,144 +360,6 @@ double NeuralNet::E(const DoubleVector& factOut, const DoubleVector& realOut)
     for(int i = 0; i < factOut.size(); i++)
         tempSum += (factOut[i] - realOut[i])*(factOut[i] - realOut[i]);
     return 0.5*tempSum;
-}
-
-DoubleVector NeuralNet::symbolToVector(const QChar& symbol)
-{
-    DoubleVector y(outputsCount);
-    if(symbol.unicode() == 45)
-    {
-        y[0] = 1.0;
-        return y;
-    }
-    if(symbol.unicode() >= 48 && symbol.unicode() <= 57)
-    {
-        int i = symbol.unicode() - 48 + 1;
-        y[i] = 1.0;
-        return y;
-    }
-    if(symbol.unicode() >= 1040 && symbol.unicode() <= 1071)
-    {
-        int i = symbol.unicode() - 1040 + 10 + 1;
-        y[i] = 1.0;
-        return y;
-    }
-    std::fill(y.begin(), y.end(), -666);
-    return y;
-}
-
-QChar NeuralNet::vectorToSymbol(const DoubleVector &y)
-{
-    QChar symbol;
-    int index;
-    double max = -1.0;
-
-    for(int i = 0; i < y.size(); i++)
-    {
-        if(y[i] > max)
-        {
-            max = y[i];
-            index = i;
-        }
-    }
-
-    if(index == 0)
-    {
-        symbol = 45;
-        return symbol;
-    }
-    if(index >= 1 && index <= 10)
-    {
-        symbol = 48 + index - 1;
-        return symbol;
-    }
-    if(index >= 11 && index <= 42)
-    {
-        symbol = 1040 + index - 10 - 1;
-        return symbol;
-    }
-    return QChar(100);
-}
-
-DoubleVector NeuralNet::pixelsToBinVector(const QImage &im)
-{
-    DoubleVector v;
-    for(int i = 0; i < IMAGE_SZ; i++)
-    {
-        for(int j = 0; j < IMAGE_SZ; j++)
-        {
-            QColor col = im.pixel(j, i);
-            int r = col.red();
-            int g = col.green();
-            int b = col.blue();
-            if(r > 240 && g > 240 && b > 240)
-            {
-                v.push_back(0.0);
-            }
-            else
-            {
-                v.push_back(1.0);
-            }
-        }
-    }
-    return v;
-}
-
-DoubleMatrix NeuralNet::pixelsToBinMatrix(const QImage &im)
-{
-    DoubleMatrix m(IMAGE_SZ);
-    for(int i = 0; i < IMAGE_SZ; i++)
-    {
-        for(int j = 0; j < IMAGE_SZ; j++)
-        {
-            QColor col = im.pixel(j, i);
-            int r = col.red();
-            int g = col.green();
-            int b = col.blue();
-            if(r == 255 && g == 255 && b == 255)
-            {
-                m[i].push_back(0.0);
-            }
-            else
-            {
-                m[i].push_back(1.0);
-            }
-        }
-    }
-    return m;
-}
-
-DoubleVector NeuralNet::crosses(const DoubleMatrix &m, const DoubleVector &v)
-{
-    DoubleVector result;
-
-    for(int i = 0; i < v.size(); i++)
-    {
-        int count = 0;
-        for(int j = 0; j < IMAGE_SZ - 1; j++)
-        {
-            if(m[ v[i] ][j] == 0.0 && m[ v[i] ][j + 1] == 1.0)
-            {
-                count++;
-            }
-        }
-        result.push_back((double)count);
-    }
-
-    for(int i = 0; i < v.size(); i++)
-    {
-        int count = 0;
-        for(int j = 0; j < IMAGE_SZ - 1; j++)
-        {
-            if(m[j][ v[i] ] == 0.0 && m[j + 1][ v[i] ] == 1.0)
-            {
-                count++;
-            }
-        }
-        result.push_back((double)count);
-    }
-
-    return result;
 }
 
 void NeuralNet::setX(const DoubleMatrix &x)
@@ -522,44 +382,54 @@ NeuronLay* NeuralNet::getL(int i) const
     return l[i];
 }
 
-IntVector &NeuralNet::getHiddenNeuronCount()
+IntVector &NeuralNet::gethidNeuronAmount()
 {
-    return hiddenNeuronCount;
+    return hidNeuronAmount;
 }
 
-void NeuralNet::setInputsCount(int inputsCount)
+int NeuralNet::getInputsAmount() const
 {
-    this->inputsCount = inputsCount;
+    return inputsAmount;
 }
 
-void NeuralNet::setOutputsCount(int outputsCount)
+int NeuralNet::getOutputsAmount() const
 {
-    this->outputsCount = outputsCount;
+    return outputsAmount;
 }
 
-void NeuralNet::setHiddenLayCount(int hiddenLayCount)
+void NeuralNet::setinputsAmount(int inputsAmount)
 {
-    this->hiddenLayCount = hiddenLayCount;
+    this->inputsAmount = inputsAmount;
+}
+
+void NeuralNet::setoutputsAmount(int outputsAmount)
+{
+    this->outputsAmount = outputsAmount;
+}
+
+void NeuralNet::sethidLayAmount(int hidLayAmount)
+{
+    this->hidLayAmount = hidLayAmount;
 
     //Создание скрытых слоев
-    int tempInputs = inputsCount;
-    for(int i = 0; i < hiddenLayCount; i++)
+    int tempInputs = inputsAmount;
+    for(int i = 0; i < hidLayAmount; i++)
     {
-        l.push_back(new NeuronLay(tempInputs, hiddenNeuronCount.at(i)));
-        tempInputs = hiddenNeuronCount.at(i);
+        l.push_back(new NeuronLay(tempInputs, hidNeuronAmount.at(i)));
+        tempInputs = hidNeuronAmount.at(i);
     }
 
     //Создание выходного слоя
-    l.push_back(new NeuronLay(tempInputs, outputsCount));
+    l.push_back(new NeuronLay(tempInputs, outputsAmount));
 
     //Объедининение выходов одного слоя со входами следующего
-    for(int i = 0; i < hiddenLayCount; i++)
+    for(int i = 0; i < hidLayAmount; i++)
         l[i]->setY(l[i+1]->x());
 }
 
-void NeuralNet::setHiddenNeuronCount(const IntVector &hiddenNeuronCount)
+void NeuralNet::sethidNeuronAmount(const IntVector &hidNeuronAmount)
 {
-    this->hiddenNeuronCount = hiddenNeuronCount;
+    this->hidNeuronAmount = hidNeuronAmount;
 }
 
 void NeuralNet::setMistake(double mistake)

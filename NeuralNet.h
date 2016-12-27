@@ -7,43 +7,42 @@
 
 class NeuralNet
 {
-private:
-    int inputsCount, outputsCount, hiddenLayCount;
-    IntVector hiddenNeuronCount;
-    NeuronLayVector l;
-    DoubleMatrix X;
-    DoubleMatrix Y;
-    double mistake;
-
 public:
     NeuralNet();
-    NeuralNet(int inputsCount, int outputsCount, int hiddenLayCount, const IntVector& hiddenNeuronCount);
+    NeuralNet(int inputsAmount, int outputsAmount, int hidLayAmount, const IntVector& hidNeuronAmount);
     ~NeuralNet();
     void readWeightsFromFile(const QString& fileName);
-    void writeWeightsToFile(int inputsCount, int outputsCount, int hidLayCount, const IntVector& hidV, const ActivationFunc& aFunc, int eraCount, double nu, double accuracy);
+    void writeWeightsToFile(int inputsAmount, int outputsAmount, int hidLayCount, const IntVector& hidV, const ActivationFunc& aFunc, int eraCount, double nu, double accuracy);
     void teach(int eraCount, double nu, double minMistake, const ActivationFunc& aFunc, const DoubleMatrix& x, const DoubleMatrix& y);
     void findDeltas(const ActivationFunc& aFunc, const DoubleVector& y);
     void correctWeights();
-    DoubleVector recognize(const DoubleVector& input, ActivationFunc aFunc);
+    DoubleVector recognize(const DoubleVector& input, const ActivationFunc& aFunc);
     double recognitionAccuracy();
     double E(const DoubleVector& factOut, const DoubleVector& realOut);
-    DoubleVector symbolToVector(const QChar& symbol);
-    QChar vectorToSymbol(const DoubleVector& y);
-    DoubleVector pixelsToBinVector(const QImage &im);
-    DoubleMatrix pixelsToBinMatrix(const QImage &im);
-    DoubleVector crosses(const DoubleMatrix& m, const DoubleVector& v);
     void setX(const DoubleMatrix& x);
     void setY(const DoubleMatrix& y);
     NeuronLayVector &getL();
     NeuronLay* getL(int i) const;
-    IntVector& getHiddenNeuronCount();
+    IntVector& gethidNeuronAmount();
+    int getInputsAmount() const;
+    int getOutputsAmount() const;
 
-    void setInputsCount(int inputsCount);
-    void setOutputsCount(int outputsCount);
-    void setHiddenLayCount(int hiddenLayCount);
-    void setHiddenNeuronCount(const IntVector& hiddenNeuronCount);
+    void setinputsAmount(int inputsAmount);
+    void setoutputsAmount(int outputsAmount);
+    void sethidLayAmount(int hidLayAmount);
+    void sethidNeuronAmount(const IntVector& hidNeuronAmount);
     void setMistake(double mistake);
     double getMistake() const;
+
+private:
+    int inputsAmount;           //Количество входов сети
+    int outputsAmount;          //Количетво выходов сети
+    int hidLayAmount;           //Количество скрытых слоев
+    IntVector hidNeuronAmount;  //Вектор количеств нейронов в каждом скрытом слое
+    NeuronLayVector l;
+    DoubleMatrix X;
+    DoubleMatrix Y;
+    double mistake;
 };
 
 #endif // NEURALNET_H

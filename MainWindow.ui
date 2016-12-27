@@ -49,7 +49,7 @@
       <number>11</number>
      </property>
      <item row="0" column="0">
-      <widget class="QLabel" name="lbl_image">
+      <widget class="QLabel" name="lbl_image_scaled">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 255, 255);</string>
        </property>
@@ -167,7 +167,7 @@
     <property name="title">
      <string>Файл</string>
     </property>
-    <addaction name="actionOpen"/>
+    <addaction name="actionOpenSymbolFile"/>
     <addaction name="actionReadWeight"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -177,13 +177,12 @@
      <string>Команды</string>
     </property>
     <addaction name="actionTeach"/>
-    <addaction name="actionRecognizePercent"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuCommands"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOpen">
+  <action name="actionOpenSymbolFile">
    <property name="text">
     <string>Открыть изображение символа</string>
    </property>
@@ -202,16 +201,6 @@
    </property>
    <property name="shortcut">
     <string>F2</string>
-   </property>
-  </action>
-  <action name="actionRecognizePercent">
-   <property name="text">
-    <string>Узнать процент распознавания</string>
-   </property>
-  </action>
-  <action name="actionAbout">
-   <property name="text">
-    <string>О программе</string>
    </property>
   </action>
   <action name="actionExit">

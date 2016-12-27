@@ -18,6 +18,9 @@
 #include <QTime>
 
 #define IMAGE_SZ 32
+#define TEACHING_ROOT "D:/Projects/TextRecognition/TextRecognition/TeachingSample"
+#define TESTING_ROOT "D:/Projects/TextRecognition/TextRecognition/TestingSample"
+#define WEIGHTS_ROOT "D:/Projects/TextRecognition/TextRecognition/Weights"
 
 enum ActivationFunc
 {
