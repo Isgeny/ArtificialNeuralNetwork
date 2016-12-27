@@ -125,7 +125,7 @@
               <item>
                <widget class="QLineEdit" name="lnEditInputs">
                 <property name="text">
-                 <string>1024</string>
+                 <string>14</string>
                 </property>
                </widget>
               </item>

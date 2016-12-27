@@ -17,6 +17,58 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::listElements(QDomElement root, QString tagname, QString attribute)
+{
+    QDomNodeList items = root.elementsByTagName(tagname);
+
+    qDebug() << "Total items = " << items.count();
+
+    for(int i = 0; i < items.count(); i++)
+    {
+        QDomNode itemnode = items.at(i);
+
+        if(itemnode.isElement())
+        {
+            QDomElement itemel = itemnode.toElement();
+            qDebug() << itemel.attribute(attribute);
+        }
+    }
+}
+
+void MainWindow::readXMLFile(const QString &filename)
+{
+    QFile file(filename);
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QDomDocument document;
+        document.setContent(&file);
+
+        QDomElement root = document.firstChildElement();
+
+        listElements(root, "Answer", "Barcode");
+        listElements(root, "Answer", "Number");
+        listElements(root, "Answer", "Value");
+
+        file.close();
+    }
+}
+
+void MainWindow::writeMatrixToFile(const DoubleMatrix &m, const QString& filename)
+{
+    QFile file(filename);
+    QTextStream out(&file);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        for(int i = 0; i < m.size(); i++)
+        {
+            for(int j = 0; j < m[i].size(); j++)
+                out << m[i][j] << " ";
+            out << "\n";
+        }
+        file.close();
+    }
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
     ui->lbl_recognized->clear();
@@ -48,7 +100,7 @@ void MainWindow::on_btn_recognize_clicked()
 {
     if(!image.isNull() && !ui->lbl_image->pixmap()->isNull())
     {
-        DoubleVector x = net->pixelsToBin(image);
+        DoubleVector x = net->pixelsToBinVector(image);
         DoubleVector recognised = net->recognize(x, Neuron::getCurrentActFunc());
         QChar recSymbol = net->vectorToSymbol(recognised);
         ui->lbl_recognized->setText(recSymbol);
@@ -81,20 +133,26 @@ void MainWindow::slot_buttonTeach_pressed(int inputsCount, int outputsCount, int
     QStringList fileList = dir.entryList(filters, QDir::Files);
     int filesCount = fileList.size();
     DoubleMatrix X, Y;
+    //DoubleVector nums {5, 7, 9, 11, 13, 17, 21};
+    DoubleVector nums {3, 7, 11, 15, 19, 23, 27};
     for(int i = 0; i < filesCount; i++)
     {
         QString filename = fileList[i];
         QImage curImage("D:/Projects/TextRecognition/TextRecognition/TrainingSample/" + filename);
 
-        DoubleVector x = net->pixelsToBin(curImage);
+        DoubleMatrix x = net->pixelsToBinMatrix(curImage);
+
+        DoubleVector crosses = net->crosses(x, nums);
 
         QChar symbol = filename[0];
         DoubleVector y = net->symbolToVector(symbol);
 
-        X.push_back(x);
+        X.push_back(crosses);
         Y.push_back(y);
     }
 
+    writeMatrixToFile(X ,"X.txt");
+    writeMatrixToFile(Y, "Y.txt");
 
     for(int i = 0; i < aFuncV.size(); i++)
     {

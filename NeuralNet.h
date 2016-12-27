@@ -29,7 +29,9 @@ public:
     double E(const DoubleVector& factOut, const DoubleVector& realOut);
     DoubleVector symbolToVector(const QChar& symbol);
     QChar vectorToSymbol(const DoubleVector& y);
-    DoubleVector pixelsToBin(const QImage &im);
+    DoubleVector pixelsToBinVector(const QImage &im);
+    DoubleMatrix pixelsToBinMatrix(const QImage &im);
+    DoubleVector crosses(const DoubleMatrix& m, const DoubleVector& v);
     void setX(const DoubleMatrix& x);
     void setY(const DoubleMatrix& y);
     NeuronLayVector &getL();

@@ -129,8 +129,7 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
     X = x;
     Y = y;
     int sampleSize = X.size();
-    QTime time;
-    time.start();
+    QDateTime startTime = QDateTime::currentDateTime();
     for(int era = 0; era < eraCount; era++)
     {
         mistake = 0.0;
@@ -184,12 +183,14 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
         }
         double currentAccuracy = recognitionAccuracy();
         qDebug() << "Current accuracy: " << currentAccuracy;
-        double curElapsTime = (double)time.elapsed();
-        qDebug() << "Current teaching time (hours): " << curElapsTime/1000.0/60.0/60.0;
+        QDateTime curTime = QDateTime::currentDateTime();
+        double curElapsTime = (double)startTime.secsTo(curTime);
+        qDebug() << "Current teaching time (hours): " << curElapsTime / 3600.0;
         writeWeightsToFile(inputsCount, outputsCount, hiddenLayCount, hiddenNeuronCount, aFunc, eraCount, nu, currentAccuracy);
     }
-    double elapsedTime = (double)time.elapsed();
-    qDebug() << "Teaching time (hours): " << elapsedTime/1000.0/60.0/60.0;
+    QDateTime finishTime = QDateTime::currentDateTime();
+    double time = (double)startTime.secsTo(finishTime);
+    qDebug() << "Teaching time (hours): " << time / 3600.0;
 }
 
 void NeuralNet::findDeltas(const ActivationFunc& aFunc, const DoubleVector& y)
@@ -335,12 +336,17 @@ double NeuralNet::recognitionAccuracy()
     QStringList filters = (QStringList() << "*.bmp");
     QStringList fileList = dir.entryList(filters, QDir::Files);
     int recocnizedCount = 0;
+    //DoubleVector nums {5, 7, 9, 11, 13, 17, 21};
+    DoubleVector nums {3, 7, 11, 15, 19, 23, 27};
     for(int j = 0; j < fileList.size(); j++)
     {
         QString filename = fileList[j];
         QImage curImage("D:/Projects/TextRecognition/TextRecognition/TestingSample/" + filename);
-        DoubleVector x = pixelsToBin(curImage);
-        DoubleVector recognized = recognize(x, Neuron::getCurrentActFunc());
+        DoubleMatrix binMatrix = pixelsToBinMatrix(curImage);
+
+        DoubleVector crosses = this->crosses(binMatrix, nums);
+
+        DoubleVector recognized = recognize(crosses, Neuron::getCurrentActFunc());
         QChar recSymbol = vectorToSymbol(recognized);
         QChar symbol = filename[0];
         if(recSymbol.unicode() == symbol.unicode())
@@ -415,12 +421,12 @@ QChar NeuralNet::vectorToSymbol(const DoubleVector &y)
     return QChar(100);
 }
 
-DoubleVector NeuralNet::pixelsToBin(const QImage &im)
+DoubleVector NeuralNet::pixelsToBinVector(const QImage &im)
 {
     DoubleVector v;
-    for(int i = 0; i < 32; i++)
+    for(int i = 0; i < IMAGE_SZ; i++)
     {
-        for(int j = 0; j < 32; j++)
+        for(int j = 0; j < IMAGE_SZ; j++)
         {
             QColor col = im.pixel(j, i);
             int r = col.red();
@@ -437,6 +443,63 @@ DoubleVector NeuralNet::pixelsToBin(const QImage &im)
         }
     }
     return v;
+}
+
+DoubleMatrix NeuralNet::pixelsToBinMatrix(const QImage &im)
+{
+    DoubleMatrix m(IMAGE_SZ);
+    for(int i = 0; i < IMAGE_SZ; i++)
+    {
+        for(int j = 0; j < IMAGE_SZ; j++)
+        {
+            QColor col = im.pixel(j, i);
+            int r = col.red();
+            int g = col.green();
+            int b = col.blue();
+            if(r == 255 && g == 255 && b == 255)
+            {
+                m[i].push_back(0.0);
+            }
+            else
+            {
+                m[i].push_back(1.0);
+            }
+        }
+    }
+    return m;
+}
+
+DoubleVector NeuralNet::crosses(const DoubleMatrix &m, const DoubleVector &v)
+{
+    DoubleVector result;
+
+    for(int i = 0; i < v.size(); i++)
+    {
+        int count = 0;
+        for(int j = 0; j < IMAGE_SZ - 1; j++)
+        {
+            if(m[ v[i] ][j] == 0.0 && m[ v[i] ][j + 1] == 1.0)
+            {
+                count++;
+            }
+        }
+        result.push_back((double)count);
+    }
+
+    for(int i = 0; i < v.size(); i++)
+    {
+        int count = 0;
+        for(int j = 0; j < IMAGE_SZ - 1; j++)
+        {
+            if(m[j][ v[i] ] == 0.0 && m[j + 1][ v[i] ] == 1.0)
+            {
+                count++;
+            }
+        }
+        result.push_back((double)count);
+    }
+
+    return result;
 }
 
 void NeuralNet::setX(const DoubleMatrix &x)

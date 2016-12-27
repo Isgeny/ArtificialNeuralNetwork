@@ -3,6 +3,8 @@
 
 #include "TeachingDialog.h"
 #include "NeuralNet.h"
+#include <QXmlStreamReader>
+#include <QDomDocument>
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +17,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void listElements(QDomElement root, QString tagname, QString attribute);
+    void readXMLFile(const QString& filename);
+    void writeMatrixToFile(const DoubleMatrix& m, const QString& filename);
 
 public slots:
     void on_actionOpen_triggered();

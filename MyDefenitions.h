@@ -17,6 +17,8 @@
 #include <QLabel>
 #include <QTime>
 
+#define IMAGE_SZ 32
+
 enum ActivationFunc
 {
     HYPERBOLIC_TANGENT = 0,

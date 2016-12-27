@@ -164,7 +164,7 @@ double Neuron::relu() const
 double Neuron::randomizedReluTeaching() const
 {
     if(sum() < 0.0)
-        return (1.0 / ((double)(qrand() % 6) + 3.0)*sum());
+        return ((1.0 / ((double)(qrand() % 6) + 3.0))*sum());
     return sum();
 }
 
@@ -210,7 +210,7 @@ double Neuron::deltaOutRelu(double real, double fact) const
 double Neuron::deltaOutRandomizedRelu(double real, double fact) const
 {
     if(sum() < 0.0)
-        return (1.0 / ((double)(rand() % 6) + 3.0) * (fact - real));
+        return ((1.0 / ((double)(qrand() % 6) + 3.0)) * (fact - real));
     return (fact - real);
 }
 
@@ -264,7 +264,7 @@ double Neuron::deltaHiddenRandomizedRelu(DoubleVector& weight, DoubleVector& del
         s += weight[i] * delta1[i];
     }
     if(sum() < 0.0)
-        return (1.0 / ((double)(rand() % 6) + 3.0)) * s;
+        return (1.0 / ((double)(qrand() % 6) + 3.0)) * s;
     return s;
 }
 
