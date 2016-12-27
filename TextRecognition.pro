@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,7 +18,8 @@ SOURCES +=\
     NeuralNet.cpp \
     NeuronLay.cpp \
     Neuron.cpp \
-    TeachingDialog.cpp
+    TeachingDialog.cpp \
+    OperatorOverloading.cpp
 
 HEADERS  += MainWindow.h \
     NeuralNet.h \

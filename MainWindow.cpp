@@ -17,42 +17,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::listElements(QDomElement root, QString tagname, QString attribute)
-{
-    QDomNodeList items = root.elementsByTagName(tagname);
-
-    qDebug() << "Total items = " << items.count();
-
-    for(int i = 0; i < items.count(); i++)
-    {
-        QDomNode itemnode = items.at(i);
-
-        if(itemnode.isElement())
-        {
-            QDomElement itemel = itemnode.toElement();
-            qDebug() << itemel.attribute(attribute);
-        }
-    }
-}
-
-void MainWindow::readXMLFile(const QString &filename)
-{
-    QFile file(filename);
-    if(file.open(QIODevice::ReadOnly))
-    {
-        QDomDocument document;
-        document.setContent(&file);
-
-        QDomElement root = document.firstChildElement();
-
-        listElements(root, "Answer", "Barcode");
-        listElements(root, "Answer", "Number");
-        listElements(root, "Answer", "Value");
-
-        file.close();
-    }
-}
-
 void MainWindow::writeMatrixToFile(const DoubleMatrix &m, const QString& filename)
 {
     QFile file(filename);
@@ -89,11 +53,6 @@ void MainWindow::on_actionOpen_triggered()
     {
         qDebug() << "Can't open file!";
     }
-}
-
-void MainWindow::on_actionRecognize_triggered()
-{
-    on_btn_recognize_clicked();
 }
 
 void MainWindow::on_btn_recognize_clicked()
@@ -196,25 +155,7 @@ void MainWindow::on_actionRecognizePercent_triggered()
     msgBox.exec();
 }
 
-
-QTextStream &operator >>(QTextStream &in, ActivationFunc& aFunc)
-{
-    in >> (quint32&)aFunc;
-    return in;
-}
-
-QTextStream &operator <<(QTextStream &out, ActivationFunc& aFunc)
-{
-    out << (quint32&)aFunc;
-    return out;
-}
-
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
-}
-
-void MainWindow::on_actionClean_triggered()
-{
-    on_btn_clear_clicked();
 }
