@@ -66,56 +66,9 @@ void MainWindow::on_actionTeach_triggered()
     teachDialog->show();
 }
 
-void MainWindow::slot_buttonTeach_pressed(int inputsCount, int outputsCount, int hidLayCount,
-                                          const IntVector& hidV, const AFuncVector& aFuncV,
-                                          int eraCount, double nu, double minMistake)
+void MainWindow::slot_buttonTeach_pressed(const TeachArg& args)
 {
-    /*net->setInputsCount(inputsCount);
-    net->setOutputsCount(outputsCount);
-    net->setHiddenNeuronCount(hidV);
-    net->setHiddenLayCount(hidLayCount);
-
-    QDir dir("D:/Projects/TextRecognition/TextRecognition/TrainingSample");
-    QStringList filters = (QStringList() << "*.bmp");
-    QStringList fileList = dir.entryList(filters, QDir::Files);
-    int filesCount = fileList.size();
-    DoubleMatrix X, Y;
-    //DoubleVector nums {5, 7, 9, 11, 13, 17, 21};
-    DoubleVector nums {3, 7, 11, 15, 19, 23, 27};
-    for(int i = 0; i < filesCount; i++)
-    {
-        QString filename = fileList[i];
-        QImage curImage("D:/Projects/TextRecognition/TextRecognition/TrainingSample/" + filename);
-
-        DoubleMatrix x = net->pixelsToBinMatrix(curImage);
-
-        DoubleVector crosses = net->crosses(x, nums);
-
-        QChar symbol = filename[0];
-        DoubleVector y = net->symbolToVector(symbol);
-
-        X.push_back(crosses);
-        Y.push_back(y);
-    }
-
-    writeMatrixToFile(X ,"X.txt");
-    writeMatrixToFile(Y, "Y.txt");
-
-    for(int i = 0; i < aFuncV.size(); i++)
-    {
-        net->teach(eraCount, nu, minMistake, aFuncV.at(i), X, Y);
-
-        double accuracy = net->recognitionAccuracy();
-        qDebug() << "Accuracy: " << accuracy;
-        qDebug() << "Inputs: " << inputsCount;
-        qDebug() << "Outputs: " << outputsCount;
-        qDebug() << "Hidden Layer Count: " << hidLayCount;
-        qDebug() << "Activation func: " << aFuncV[i];
-        qDebug() << "Era count: " << eraCount;
-        qDebug() << "Nu: " << nu;
-
-        net->writeWeightsToFile(inputsCount, outputsCount, hidLayCount, hidV, aFuncV.at(i), eraCount, nu, accuracy);
-    }*/
+    presenter->teach(args);
 }
 
 void MainWindow::on_actionReadWeight_triggered()

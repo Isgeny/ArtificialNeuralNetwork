@@ -15,36 +15,37 @@ TeachingDialog::~TeachingDialog()
 
 void TeachingDialog::on_btn_teach_clicked()
 {
-    int inputs = ui->lnEditInputs->text().toInt();
-    int outputs = ui->lnEditOutputs->text().toInt();
-    int hiddenLayCount = ui->lnEditHiddenLayCount->text().toInt();
-    QString hidNeuronsCount = ui->txtEditHiddenNeurons->toPlainText();
-    int eraCount = ui->lnEditEraCount->text().toInt();
-    double nu = ui->lnEditNu->text().toDouble();
-    double minMistake = ui->lnEditMinMistake->text().toDouble();
+    TeachArg args;
+    args.inputsAmount  = ui->lnEditInputs->text().toInt();
+    args.outputsAmount = ui->lnEditOutputs->text().toInt();
+    args.hidLayAmount  = ui->lnEditHiddenLayCount->text().toInt();
+    args.eraAmount     = ui->lnEditEraCount->text().toInt();
+    args.nu            = ui->lnEditNu->text().toDouble();
+    args.minMistake    = ui->lnEditMinMistake->text().toDouble();
 
+    QString hidNeuronsCount = ui->txtEditHiddenNeurons->toPlainText();
     IntVector hidV;
     QTextStream in(&hidNeuronsCount);
-    for(int i = 0; i < hiddenLayCount; i++)
+    for(int i = 0; i < args.hidLayAmount; i++)
     {
         int temp;
         in >> temp;
         hidV.push_back(temp);
     }
+    args.hidV = hidV;
 
-    AFuncVector aFuncV;
-    if(ui->chBox_Tanh->isChecked())
-        aFuncV.push_back(HYPERBOLIC_TANGENT);
-    if(ui->chBox_Logsigm->isChecked())
-        aFuncV.push_back(LOG_SIGMOID);
-    if(ui->chBox_Softplus->isChecked())
-        aFuncV.push_back(SOFTPLUS);
-    if(ui->chBox_ReLU->isChecked())
-        aFuncV.push_back(RELU);
-    if(ui->chBox_RReLU->isChecked())
-        aFuncV.push_back(RANDOMIZED_RELU);
+    if(ui->rB_Tanh->isChecked())
+        args.actFunc = HYPERBOLIC_TANGENT;
+    if(ui->rB_Logsigm->isChecked())
+        args.actFunc = LOG_SIGMOID;
+    if(ui->rB_Softplus->isChecked())
+        args.actFunc = SOFTPLUS;
+    if(ui->rB_ReLU->isChecked())
+        args.actFunc = RELU;
+    if(ui->rB_RReLU->isChecked())
+        args.actFunc = RANDOMIZED_RELU;
     this->close();
-    emit signalBtnTeachClicked(inputs, outputs, hiddenLayCount, hidV, aFuncV, eraCount, nu, minMistake);
+    emit signalBtnTeachClicked(args);
 }
 
 void TeachingDialog::on_btnCancel_clicked()

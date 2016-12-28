@@ -20,12 +20,11 @@ public slots:
     void on_btnCancel_clicked();
 
 signals:
-    void signalBtnTeachClicked(int inputsCount, int outputsCount, int hidLayCount,
-                               const IntVector& hidV, const AFuncVector& aFunc,
-                               int eraCount, double nu, double minMistake);
+    void signalBtnTeachClicked(const TeachArg& args);
 
 private:
-    Ui::TeachingDialog *ui;
+    Ui::TeachingDialog* ui;
+
 };
 
 #endif // TEACHINGDIALOG_H

@@ -121,15 +121,16 @@ void NeuralNet::writeWeightsToFile(int inputsAmount, int outputsAmount, int hidL
     file.close();
 }
 
-void NeuralNet::teach(int eraCount, double nu, double minMistake, const ActivationFunc& aFunc, const DoubleMatrix& x, const DoubleMatrix& y)
+void NeuralNet::teach(const TeachArg& args, const DoubleMatrix& X, const DoubleMatrix& Y)
 {
-    QDir dir("D:/Projects/TextRecognition/TextRecognition/TrainingSample");
-    Neuron::setNu(nu);
-    Neuron::setCurrentActFunc(aFunc);
-    X = x;
-    Y = y;
+    /*QDir dir(TRAINING_ROOT);
+    Neuron::setNu(args.nu);
+    Neuron::setCurrentActFunc(args.actFunc);
+    this->X = X;
+    this->Y = Y;
     int sampleSize = X.size();
     QDateTime startTime = QDateTime::currentDateTime();
+
     for(int era = 0; era < eraCount; era++)
     {
         mistake = 0.0;
@@ -190,7 +191,7 @@ void NeuralNet::teach(int eraCount, double nu, double minMistake, const Activati
     }
     QDateTime finishTime = QDateTime::currentDateTime();
     double time = (double)startTime.secsTo(finishTime);
-    qDebug() << "Teaching time (hours): " << time / 3600.0;
+    qDebug() << "Teaching time (hours): " << time / 3600.0;*/
 }
 
 void NeuralNet::findDeltas(const ActivationFunc& aFunc, const DoubleVector& y)

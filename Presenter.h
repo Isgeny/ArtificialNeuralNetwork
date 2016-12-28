@@ -5,8 +5,6 @@
 #include "NeuralNet.h"
 #include "MyDefenitions.h"
 
-class MainWindow;
-
 class Presenter
 {
 public:
@@ -14,6 +12,7 @@ public:
     void openSymbolFile();
     void readWeightFromFile();
     QChar recognizeSymbol();
+    void teach(const TeachArg& args);
 
 private:
     DoubleVector pixelsToBinVector(const QImage &image);

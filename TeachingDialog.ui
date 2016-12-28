@@ -176,41 +176,44 @@
          <item>
           <widget class="QGroupBox" name="groupBox">
            <property name="title">
-            <string>Активационные функции:</string>
+            <string>Активационная функция обучения:</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QCheckBox" name="chBox_Tanh">
+             <widget class="QRadioButton" name="rB_Tanh">
               <property name="text">
-               <string>TanH</string>
+               <string>Tanh</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="chBox_Logsigm">
+             <widget class="QRadioButton" name="rB_Logsigm">
               <property name="text">
                <string>Log-sigmoid</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="chBox_Softplus">
+             <widget class="QRadioButton" name="rB_Softplus">
               <property name="text">
                <string>Softplus</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="chBox_ReLU">
+             <widget class="QRadioButton" name="rB_ReLU">
               <property name="text">
                <string>ReLU</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="chBox_RReLU">
+             <widget class="QRadioButton" name="rB_RReLU">
               <property name="text">
-               <string>Randomized ReLU</string>
+               <string>RReLU</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -263,6 +266,22 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lnEditHiddenLayCount</tabstop>
+  <tabstop>lnEditEraCount</tabstop>
+  <tabstop>txtEditHiddenNeurons</tabstop>
+  <tabstop>rB_Tanh</tabstop>
+  <tabstop>rB_Logsigm</tabstop>
+  <tabstop>rB_Softplus</tabstop>
+  <tabstop>rB_ReLU</tabstop>
+  <tabstop>rB_RReLU</tabstop>
+  <tabstop>lnEditInputs</tabstop>
+  <tabstop>lnEditOutputs</tabstop>
+  <tabstop>lnEditNu</tabstop>
+  <tabstop>lnEditMinMistake</tabstop>
+  <tabstop>btn_teach</tabstop>
+  <tabstop>btnCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -1,6 +1,5 @@
 #include "Neuron.h"
 
-double Neuron::a = 1.0;
 double Neuron::nu = 0.8;
 ActivationFunc Neuron::currentActFunc = HYPERBOLIC_TANGENT;
 
@@ -68,16 +67,6 @@ double Neuron::getBias() const
     return bias;
 }
 
-void Neuron::setA(double _a)
-{
-    a = _a;
-}
-
-double Neuron::getA()
-{
-    return a;
-}
-
 void Neuron::setNu(double _nu)
 {
     nu = _nu;
@@ -141,7 +130,7 @@ double Neuron::sum() const
 
 double Neuron::logSigm() const
 {
-    return (1.0)/(1.0 + exp(-sum()*a));
+    return (1.0)/(1.0 + exp(-sum()));
 }
 
 double Neuron::gipTang() const
@@ -164,7 +153,7 @@ double Neuron::relu() const
 double Neuron::randomizedReluTeaching() const
 {
     if(sum() < 0.0)
-        return ((1.0 / ((double)(qrand() % 6) + 3.0))*sum());
+        return ((1.0 / ((double)(rand() % 6) + 3.0))*sum());
     return sum();
 }
 
@@ -187,7 +176,7 @@ double Neuron::deltaWBias() const
 
 double Neuron::deltaOutLogSigm(double real, double fact) const
 {
-    return a*logSigm()*(1 - logSigm())*(fact - real);
+    return logSigm()*(1 - logSigm())*(fact - real);
 }
 
 double Neuron::deltaOutGipTang(double real, double fact) const
@@ -210,7 +199,7 @@ double Neuron::deltaOutRelu(double real, double fact) const
 double Neuron::deltaOutRandomizedRelu(double real, double fact) const
 {
     if(sum() < 0.0)
-        return ((1.0 / ((double)(qrand() % 6) + 3.0)) * (fact - real));
+        return ((1.0 / ((double)(rand() % 6) + 3.0)) * (fact - real));
     return (fact - real);
 }
 
@@ -221,7 +210,7 @@ double Neuron::deltaHiddenLogSigm(DoubleVector& weight, DoubleVector& delta1) co
     {
         sum += weight[i] * delta1[i];
     }
-    return (a*logSigm()*(1 - logSigm()))*sum;
+    return (logSigm()*(1 - logSigm()))*sum;
 }
 
 double Neuron::deltaHiddenGipTang(DoubleVector& weight, DoubleVector& delta1) const
@@ -264,7 +253,7 @@ double Neuron::deltaHiddenRandomizedRelu(DoubleVector& weight, DoubleVector& del
         s += weight[i] * delta1[i];
     }
     if(sum() < 0.0)
-        return (1.0 / ((double)(qrand() % 6) + 3.0)) * s;
+        return (1.0 / ((double)(rand() % 6) + 3.0)) * s;
     return s;
 }
 
@@ -272,7 +261,7 @@ void Neuron::setRandomWeight()
 {
     for(int i = 0; i < W.size(); i++)
     {
-        W[i] = (double)(qrand()) / RAND_MAX*(0.01 - (-0.01)) - 0.01;
+        W[i] = (double)(rand()) / RAND_MAX*(0.01 - (-0.01)) - 0.01;
     }
-    bias = (double)(qrand()) / RAND_MAX*(0.01 - (-0.01)) - 0.01;
+    bias = (double)(rand()) / RAND_MAX*(0.01 - (-0.01)) - 0.01;
 }

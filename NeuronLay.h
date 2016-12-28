@@ -5,12 +5,6 @@
 
 class NeuronLay
 {
-private:
-    NeuronVector N;
-    DoubleVector *X, *Y;
-    int inCount, outCount;
-    DoubleVector Delta;
-
 public:
     NeuronLay(int inCount, int outCount);
     ~NeuronLay();
@@ -31,8 +25,12 @@ public:
     DoubleVector& delta();
     double& delta(int i);
 
-};
+private:
+    NeuronVector N;
+    DoubleVector *X, *Y;
+    int inCount, outCount;
+    DoubleVector Delta;
 
-typedef std::vector<NeuronLay*> NeuronLayVector;
+};
 
 #endif // NEURONLAY_H

@@ -4,12 +4,11 @@
 #include "TeachingDialog.h"
 #include "NeuralNet.h"
 #include "Presenter.h"
+#include "MyDefenitions.h"
 
 namespace Ui {
 class MainWindow;
 }
-
-class Presenter;
 
 class MainWindow : public QMainWindow
 {
@@ -22,9 +21,7 @@ public:
     QImage& getImage();
 
 public slots:
-    void slot_buttonTeach_pressed(int inputsCount, int outputsCount, int hidLayCount,
-                                  const IntVector& hidV, const AFuncVector& aFuncV,
-                                  int eraCount, double nu, double minMistake);
+    void slot_buttonTeach_pressed(const TeachArg& args);
 
 private slots:
     void on_actionOpenSymbolFile_triggered();

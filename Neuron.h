@@ -5,16 +5,6 @@
 
 class Neuron
 {
-private:
-    DoubleVector* X;
-    DoubleVector W;
-    double bias;
-    static double a;
-    static double nu;
-    static ActivationFunc currentActFunc;
-    double *yPntr;
-    double *delta;
-
 public:
     Neuron(int inCount, DoubleVector* x, double* yPntr, double* delta);
     ~Neuron();
@@ -28,8 +18,6 @@ public:
     double& w(int i);
     void setBias(double bias);
     double getBias() const;
-    static void setA(double a);
-    static double getA();
     static void setNu(double nu);
     static double getNu();
     static void setCurrentActFunc(ActivationFunc aFunc);
@@ -62,9 +50,18 @@ public:
     double deltaHiddenRelu(DoubleVector& weight, DoubleVector& delta1) const;
     double deltaHiddenRandomizedRelu(DoubleVector& weight, DoubleVector& delta1) const;
 
+private:
     void setRandomWeight();
-};
 
-typedef QVector<Neuron*> NeuronVector;
+private:
+    DoubleVector* X;
+    DoubleVector W;
+    double bias;
+    static double nu;
+    static ActivationFunc currentActFunc;
+    double *yPntr;
+    double *delta;
+
+};
 
 #endif // NEURON_H

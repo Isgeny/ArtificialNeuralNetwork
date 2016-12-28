@@ -54,6 +54,40 @@ QChar Presenter::recognizeSymbol()
     return recSymbol;
 }
 
+void Presenter::teach(const TeachArg &args)
+{
+    QDir dir(TRAINING_ROOT);
+    QStringList filters = (QStringList() << "*.bmp");
+    QStringList fileList = dir.entryList(filters, QDir::Files);
+    int filesCount = fileList.size();
+    DoubleMatrix X, Y;
+    for(int i = 0; i < filesCount; i++)
+    {
+        QString filename = fileList[i];
+        QImage curImage(TRAINING_ROOT + filename);
+
+        DoubleVector x = this->pixelsToBinVector(curImage);
+        X.push_back(x);
+
+        QChar symbol = filename[0];
+        DoubleVector y = this->symbolToVector(symbol);
+        Y.push_back(y);
+    }
+
+    model_Net->teach(args, X, Y);
+
+    /*double accuracy = net->recognitionAccuracy();
+    qDebug() << "Accuracy: " << accuracy;
+    qDebug() << "Inputs: " << inputsCount;
+    qDebug() << "Outputs: " << outputsCount;
+    qDebug() << "Hidden Layer Count: " << hidLayCount;
+    qDebug() << "Activation func: " << aFuncV[i];
+    qDebug() << "Era count: " << eraCount;
+    qDebug() << "Nu: " << nu;
+
+    net->writeWeightsToFile(inputsCount, outputsCount, hidLayCount, hidV, aFuncV.at(i), eraCount, nu, accuracy);*/
+}
+
 DoubleVector Presenter::pixelsToBinVector(const QImage &image)
 {
     //Преобразование изображения в бинарный вектор

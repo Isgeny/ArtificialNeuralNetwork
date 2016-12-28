@@ -13,7 +13,7 @@ public:
     ~NeuralNet();
     void readWeightsFromFile(const QString& fileName);
     void writeWeightsToFile(int inputsAmount, int outputsAmount, int hidLayCount, const IntVector& hidV, const ActivationFunc& aFunc, int eraCount, double nu, double accuracy);
-    void teach(int eraCount, double nu, double minMistake, const ActivationFunc& aFunc, const DoubleMatrix& x, const DoubleMatrix& y);
+    void teach(const TeachArg& args, const DoubleMatrix& X, const DoubleMatrix& Y);
     void findDeltas(const ActivationFunc& aFunc, const DoubleVector& y);
     void correctWeights();
     DoubleVector recognize(const DoubleVector& input, const ActivationFunc& aFunc);
@@ -43,6 +43,7 @@ private:
     DoubleMatrix X;
     DoubleMatrix Y;
     double mistake;
+
 };
 
 #endif // NEURALNET_H
